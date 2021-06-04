@@ -6,10 +6,11 @@ class Boundary {
   float h;
   float r;
   float c;
-  
   PImage shell;
   
+  
   Body b;
+
 
   Boundary(float x_,float y_, float w_, float h_, float c_) {
     x = x_;
@@ -36,6 +37,7 @@ class Boundary {
     
     // Attached the shape to the body using a Fixture
     b.createFixture(sd,1);
+    b.setUserData(this);
   }
   
    Boundary(float x_,float y_, float r_) {
@@ -56,9 +58,12 @@ class Boundary {
     b = box2d.createBody(bd);
     
     b.createFixture(cs,1);
+    b.setUserData(this);
+    
     shell = loadImage("shell.png");
     
   }
+  
 
   // Draw the boundary, if it were at an angle we'd have to do something fancier
   void display() {

@@ -4,7 +4,6 @@
 import gifAnimation.*;
 
 import shiffman.box2d.*;
-
 import org.jbox2d.common.*;
 import org.jbox2d.dynamics.joints.*;
 import org.jbox2d.collision.shapes.*;
@@ -29,6 +28,8 @@ ArrayList<Surface> homes;
 Surface arco;
 
 Surface inclinada;
+ArrayList<Crabby> crabbies;
+
 
 void setup() {
   size(504, 702);
@@ -61,7 +62,6 @@ void setup() {
   //Barra inclinada
   inclinada = new Surface();
   
-  
   //conchas-obstaculos
   obstaculos = new ArrayList<Boundary>();
   obstaculos.add(new Boundary(width-150,150,8));
@@ -70,15 +70,38 @@ void setup() {
   obstaculos.add(new Boundary(width-170,height/2,8));
   obstaculos.add(new Boundary(width-120,height-240,8));
   
+  
   //crabs homes
   homes = new ArrayList<Surface>();
-  homes.add (new Surface(240,450, 30, 0, 180));
-  homes.add (new Surface(90,430, 30, 0, 180));
-  homes.add (new Surface(160,270, 30, 0, 180));
-  homes.add (new Surface(300,260, 30, 0, 180));
-  homes.add (new Surface(230,120, 30, 0, 180));
+  Surface home1 = new Surface(240,450, 30, 0, 180);
+  home1.setCaracteristica("home",300);
+  homes.add(home1);
   
-  escenario = 1;  
+  Surface home2 = new Surface(90,430, 30, 0, 180);
+  home2.setCaracteristica("home",200);
+  homes.add(home2);
+  
+  Surface home3 = new Surface(160,270, 30, 0, 180);
+  home3.setCaracteristica("home",150);
+  homes.add(home3);
+  
+  Surface home4 = new Surface(300,260, 30, 0, 180);
+  home4.setCaracteristica("home",200);
+  homes.add(home4);
+  
+  Surface home5 = new Surface(230,120, 30, 0, 180);
+  home5.setCaracteristica("home",100);
+  homes.add(home5);
+  
+  //Crabbies
+  crabbies = new ArrayList<Crabby>();
+  crabbies.add (new Crabby(width-40,height-40,30));
+  //crabbies.add (new Crabby(width-70,height-40,30));
+  //crabbies.add (new Crabby(width-100,height-40,30));
+  //crabbies.add (new Crabby(width-130,height-40,30));
+  //crabbies.add (new Crabby(width-160,height-40,30));
+  
+  escenario = 2;  
 }
 
 
@@ -115,6 +138,10 @@ void escenario2() {
   for (Surface home : homes) {
     home.display();
   }
+   for (Crabby crabbie : crabbies) {
+    crabbie.display();
+  }
+  
 }
 
 
@@ -123,3 +150,38 @@ void keyPressed() {
     escenario = 2;
   }  
 }
+
+void beginContact(Contact cp) {
+  // Get both fixtures
+  Fixture f1 = cp.getFixtureA();
+  Fixture f2 = cp.getFixtureB();
+  // Get both bodies
+  Body b1 = f1.getBody();
+  Body b2 = f2.getBody();
+
+  // Get our objects that reference these bodies
+  Object o1 = b1.getUserData();
+  Object o2 = b2.getUserData();
+
+  if (o1.getClass() == Crabby.class && o2.getClass() == Surface.class) {
+    Surface tmpHome = (Surface) o2;
+    if (tmpHome.getId().equals("home")){
+      Crabby tmpCrabby = (Crabby) o1;
+      tmpCrabby.ganarPuntos(tmpHome.getValor());
+    }
+   
+  }
+  
+  if (o1.getClass() == Surface.class && o2.getClass() == Crabby.class) {
+    Surface tmpHome = (Surface) o1;
+    if (tmpHome.getId().equals("home")){
+      Crabby tmpCrabby = (Crabby) o2;
+      tmpCrabby.ganarPuntos(tmpHome.getValor());
+    }
+  }
+
+}
+
+// Objects stop touching each other
+//void endContact(Contact cp) {
+//}

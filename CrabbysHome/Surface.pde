@@ -1,6 +1,8 @@
 class Surface {
 
   ArrayList<Vec2> surface;
+  String id = "";
+  int valor = 0;
 
   //Constructor para construir arcos
   Surface(float _x, float _y, float _r, int _beginAngle, int _endAngle) {
@@ -55,6 +57,20 @@ class Surface {
     body.createFixture(chain,1);
   }
   
+   void setCaracteristica(String _id, int _valor){
+    id = _id;
+    valor = _valor;
+   }
+   
+   String getId() {
+     return id;
+   }
+   
+   int getValor() {
+     return valor;
+   }
+   
+   
    void display() {
    
     strokeWeight(10);
