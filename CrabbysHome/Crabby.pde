@@ -13,10 +13,8 @@ class Crabby {
     
     makeBody(new Vec2(x,y),r);
     body.setUserData(this);
-    crabbyBola = loadImage("crabbyBola.png");
-    
+    crabbyBola = loadImage("crabbyBola.png");    
   }
-
 
   void makeBody(Vec2 center, float r){
     
@@ -51,12 +49,10 @@ class Crabby {
   void display() {
     
     Vec2 pos = box2d.getBodyPixelCoord(body);
-    float a = body.getAngle();
-       
+    float a = body.getAngle();       
    
     ellipseMode(CENTER);
     noFill();
-    //fill(250);
     noStroke();
     pushMatrix();
     translate(pos.x,pos.y);
@@ -65,7 +61,9 @@ class Crabby {
     popMatrix();
     image(crabbyBola,pos.x,pos.y);
     
-    text("Puntaje: "+puntos, 200,100);
+    textSize(width/25);
+    textAlign(CENTER);
+    text("SCORE: "+puntos, width/2, height/7);
    }
   
 }

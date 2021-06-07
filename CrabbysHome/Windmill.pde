@@ -3,18 +3,19 @@ class Windmill {
   RevoluteJoint joint;
   Box box1;
   Box box2;
+  int direccion;
   
-  Windmill(float x, float y) {
+  Windmill(float x, float y, int direccion) {
   
-    box1 = new Box(x, y, width/6, 3.5, false);
+    box1 = new Box(x, y, width/7, 3.5, false);
     box2 = new Box(x, y, 1, 3.5, true);
     
     RevoluteJointDef rjd = new RevoluteJointDef();
     
     rjd.initialize(box1.body, box2.body, box1.body.getWorldCenter());
     
-    rjd.motorSpeed = -PI*2;       
-    rjd.maxMotorTorque = 30000.0; 
+    rjd.motorSpeed = PI*2 * direccion;       
+    rjd.maxMotorTorque = 100000.0; 
     rjd.enableMotor = true;   
     
     joint = (RevoluteJoint) box2d.world.createJoint(rjd);

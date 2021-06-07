@@ -7,10 +7,8 @@ class Boundary {
   float r;
   float c;
   PImage shell;
-  
-  
+    
   Body b;
-
 
   Boundary(float x_,float y_, float w_, float h_, float c_) {
     x = x_;
@@ -27,7 +25,6 @@ class Boundary {
     float box2dH = box2d.scalarPixelsToWorld(h/2);
     // We're just a box
     sd.setAsBox(box2dW, box2dH);
-
 
     // Create the body
     BodyDef bd = new BodyDef();
@@ -60,8 +57,7 @@ class Boundary {
     b.createFixture(cs,1);
     b.setUserData(this);
     
-    shell = loadImage("shell.png");
-    
+    shell = loadImage("shell.png");    
   }
   
 
@@ -82,5 +78,4 @@ class Boundary {
       image(shell,x,y);
     }
   }
-
 }

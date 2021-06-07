@@ -30,10 +30,9 @@ class Surface {
     body.createFixture(chain,1);
     body.setUserData(this);
   }
-  
-  
+   
    //Constructor para construir linea inclinada 
-   Surface() {
+  Surface() {
     surface = new ArrayList<Vec2>();
 
     surface.add(new Vec2(width-80,height-30));
@@ -49,7 +48,6 @@ class Surface {
     
     chain.createChain(vertices,vertices.length);
  
-
     BodyDef bd = new BodyDef();
     Body body = box2d.world.createBody(bd);
     // Shortcut, we could define a fixture if we
@@ -57,32 +55,31 @@ class Surface {
     body.createFixture(chain,1);
   }
   
-   void setCaracteristica(String _id, int _valor){
+  void setCaracteristica(String _id, int _valor){
     id = _id;
     valor = _valor;
-   }
+  }
    
-   String getId() {
-     return id;
-   }
+  String getId() {
+    return id;
+  }
    
-   int getValor() {
-     return valor;
-   }
+  int getValor() {
+    return valor;
+  }
    
    
    void display() {
    
-    strokeWeight(10);
-    stroke(#c1b376);
-    noFill();
-    beginShape();
-    for (Vec2 v: surface) {
-      vertex(v.x,v.y);
+     strokeWeight(10);
+     stroke(#c1b376);
+     noFill();
+     beginShape();
+     for (Vec2 v: surface) {
+       vertex(v.x,v.y);
     }
     //vertex(0,height);
     //vertex(width,height);
     endShape();
-  }
-  
+  } 
 }

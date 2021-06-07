@@ -16,6 +16,8 @@ import org.jbox2d.dynamics.contacts.*;
 // A reference to our box2d world
 Box2DProcessing box2d;
 
+PFont font;
+
 PImage[] animation;
 Gif loopingE1;
 
@@ -32,6 +34,7 @@ Surface inclinada;
 
 ArrayList<Crabby> crabbies;
 
+ArrayList<Windmill> windmills;
 Windmill windmill;
 
 Flipper fl;
@@ -47,8 +50,7 @@ void setup() {
   frameRate(60);
   
   bgEsc02 = loadImage("bgEsc02.png");
-  loopingE1 = new Gif(this, "loopingE1.gif");
-  
+  loopingE1 = new Gif(this, "loopingE1.gif"); 
   
   // Initialize box2d physics and create the world
   box2d = new Box2DProcessing(this);
@@ -110,27 +112,31 @@ void setup() {
   //crabbies.add (new Crabby(width-130,height-40,30));
   //crabbies.add (new Crabby(width-160,height-40,30));
   
-  windmill = new Windmill(240, 300);
+  //windmills
+  windmills = new ArrayList<Windmill>();  
+  windmills.add (new Windmill(width-width/3.8, height/2.5, -1));
+  windmills.add (new Windmill(width/9, 480, 1));  
   
+  //flippers
   fr = new Flipper(width/2 + 70, height - 120, 25, -QUARTER_PI/2, QUARTER_PI, false, 15, 10, 60);
-  fl = new Flipper(width/2 - 120, height - 120, 25, -QUARTER_PI/2 - radians(15), QUARTER_PI - radians(20), true, 15, 10, 60);
-  
+  fl = new Flipper(width/2 - 120, height - 120, 25, -QUARTER_PI/2 - radians(15), QUARTER_PI - radians(20), true, 15, 10, 60);  
   rflip = false;
   
-  escenario = 2;  
+  escenario = 2;
+  
+  font = createFont("crabbytype.ttf",width/50);
+  textFont(font);
 }
 
 
 void draw() {
-  background(250);
   box2d.step();
   
-   if (escenario == 1)
+  if (escenario == 1)
     escenario1();
   else if (escenario == 2)
     escenario2();
 }
-
 
 void escenario1() {    
   loopingE1.loop();
@@ -150,14 +156,18 @@ void escenario2() {
    for (Boundary obs : obstaculos) {
     obs.display();
   }
+  
   for (Surface home : homes) {
     home.display();
   }
+  
    for (Crabby crabbie : crabbies) {
     crabbie.display();
-  }
+  }  
   
-  windmill.display();
+   for (Windmill windmill : windmills) {
+    windmill.display();
+  }
   
   fr.display();
   fl.display();
@@ -172,35 +182,26 @@ void keyPressed() {
     escenario = 2;
   }
   
-  if(keyCode == RIGHT && rflip)
-  {
+  if(keyCode == RIGHT && rflip) {
     fr.reverseSpeed();
-    //ff.reverseSpeed();
     rflip = false;
-   // fflip = false;
   }
-  if(keyCode == LEFT && lflip)
-  {
+  
+  if(keyCode == LEFT && lflip) {
     fl.reverseSpeed();
-    //ft.reverseSpeed();
     lflip = false;
-    //tflip = false;
   }
 }
 
 void keyReleased( ){
   if(keyCode == RIGHT && rflip) {
     fr.reverseSpeed();
-   // ff.reverseSpeed();
     rflip = true;
-    //fflip = true;
   }
   
   if(keyCode == LEFT && lflip) {
     fl.reverseSpeed();
-    //ft.reverseSpeed();
     lflip = true;
-    //tflip = true;
   }
 }
 
@@ -208,6 +209,7 @@ void beginContact(Contact cp) {
   // Get both fixtures
   Fixture f1 = cp.getFixtureA();
   Fixture f2 = cp.getFixtureB();
+  
   // Get both bodies
   Body b1 = f1.getBody();
   Body b2 = f2.getBody();
@@ -221,8 +223,7 @@ void beginContact(Contact cp) {
     if (tmpHome.getId().equals("home")){
       Crabby tmpCrabby = (Crabby) o1;
       tmpCrabby.ganarPuntos(tmpHome.getValor());
-    }
-   
+    }   
   }
   
   if (o1.getClass() == Surface.class && o2.getClass() == Crabby.class) {
@@ -232,7 +233,6 @@ void beginContact(Contact cp) {
       tmpCrabby.ganarPuntos(tmpHome.getValor());
     }
   }
-
 }
 
 // Objects stop touching each other
