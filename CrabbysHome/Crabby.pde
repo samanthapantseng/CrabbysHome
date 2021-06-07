@@ -33,7 +33,7 @@ class Crabby {
     FixtureDef fd = new FixtureDef();
     fd.shape = cs;
     
-    //Parameters that affect physcis
+    //Parameters that affect physics
     fd.density =1;
     fd.friction = 0.3;
     fd.restitution =0.5;

@@ -23,13 +23,22 @@ PImage bgEsc02;
 int escenario;
 
 ArrayList<Boundary> paredes;
+
 ArrayList<Boundary> obstaculos;
+
 ArrayList<Surface> homes;
 Surface arco;
-
 Surface inclinada;
+
 ArrayList<Crabby> crabbies;
 
+Windmill windmill;
+
+Flipper fl;
+Flipper fr;
+
+boolean lflip;
+boolean rflip;
 
 void setup() {
   size(504, 702);
@@ -56,11 +65,11 @@ void setup() {
   //Barra cañon de disparo
   paredes.add(new Boundary(width-80,height/2+60,10,350,7));
   //Barras de puntaje
-  paredes.add(new Boundary(width/4-30,height-150,10,70,7));
-  paredes.add(new Boundary(width/2-50,height-150,10,70,7));
-  paredes.add(new Boundary(width-190,height-150,10,70,7));
+  //paredes.add(new Boundary(width/4-30,height-150,10,70,7));
+  //paredes.add(new Boundary(width/2-50,height-150,10,70,7));
+  //paredes.add(new Boundary(width-190,height-150,10,70,7));
   //Barra inclinada
-  inclinada = new Surface();
+  //inclinada = new Surface();
   
   //conchas-obstaculos
   obstaculos = new ArrayList<Boundary>();
@@ -73,25 +82,25 @@ void setup() {
   
   //crabs homes
   homes = new ArrayList<Surface>();
-  Surface home1 = new Surface(240,450, 30, 0, 180);
-  home1.setCaracteristica("home",300);
-  homes.add(home1);
+  //Surface home1 = new Surface(240,450, 30, 0, 180);
+  //home1.setCaracteristica("home",300);
+  //homes.add(home1);
   
-  Surface home2 = new Surface(90,430, 30, 0, 180);
-  home2.setCaracteristica("home",200);
-  homes.add(home2);
+  //Surface home2 = new Surface(90,430, 30, 0, 180);
+  //home2.setCaracteristica("home",200);
+  //homes.add(home2);
   
-  Surface home3 = new Surface(160,270, 30, 0, 180);
-  home3.setCaracteristica("home",150);
-  homes.add(home3);
+  //Surface home3 = new Surface(160,270, 30, 0, 180);
+  //home3.setCaracteristica("home",150);
+  //homes.add(home3);
   
-  Surface home4 = new Surface(300,260, 30, 0, 180);
-  home4.setCaracteristica("home",200);
-  homes.add(home4);
+  //Surface home4 = new Surface(300,260, 30, 0, 180);
+  //home4.setCaracteristica("home",200);
+  //homes.add(home4);
   
-  Surface home5 = new Surface(230,120, 30, 0, 180);
-  home5.setCaracteristica("home",100);
-  homes.add(home5);
+  //Surface home5 = new Surface(230,120, 30, 0, 180);
+  //home5.setCaracteristica("home",100);
+  //homes.add(home5);
   
   //Crabbies
   crabbies = new ArrayList<Crabby>();
@@ -100,6 +109,13 @@ void setup() {
   //crabbies.add (new Crabby(width-100,height-40,30));
   //crabbies.add (new Crabby(width-130,height-40,30));
   //crabbies.add (new Crabby(width-160,height-40,30));
+  
+  windmill = new Windmill(240, 300);
+  
+  fr = new Flipper(width/2 + 70, height - 120, 25, -QUARTER_PI/2, QUARTER_PI, false, 15, 10, 60);
+  fl = new Flipper(width/2 - 120, height - 120, 25, -QUARTER_PI/2 - radians(15), QUARTER_PI - radians(20), true, 15, 10, 60);
+  
+  rflip = false;
   
   escenario = 2;  
 }
@@ -126,7 +142,6 @@ void escenario2() {
   
   image(bgEsc02, width/2, height/2, width, height);
   arco.display();
-  inclinada.display();
   
   for (Boundary pared : paredes) {
     pared.display();
@@ -142,13 +157,51 @@ void escenario2() {
     crabbie.display();
   }
   
+  windmill.display();
+  
+  fr.display();
+  fl.display();
+  
+  rflip = true;
+  lflip = true;  
 }
 
 
 void keyPressed() {    
   if (key == 's') {
     escenario = 2;
-  }  
+  }
+  
+  if(keyCode == RIGHT && rflip)
+  {
+    fr.reverseSpeed();
+    //ff.reverseSpeed();
+    rflip = false;
+   // fflip = false;
+  }
+  if(keyCode == LEFT && lflip)
+  {
+    fl.reverseSpeed();
+    //ft.reverseSpeed();
+    lflip = false;
+    //tflip = false;
+  }
+}
+
+void keyReleased( ){
+  if(keyCode == RIGHT && rflip) {
+    fr.reverseSpeed();
+   // ff.reverseSpeed();
+    rflip = true;
+    //fflip = true;
+  }
+  
+  if(keyCode == LEFT && lflip) {
+    fl.reverseSpeed();
+    //ft.reverseSpeed();
+    lflip = true;
+    //tflip = true;
+  }
 }
 
 void beginContact(Contact cp) {
