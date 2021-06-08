@@ -7,6 +7,9 @@ class Boundary {
   float r;
   float c;
   PImage shell;
+  
+  String id = "";
+  int valor = 0;
     
   Body b;
 
@@ -60,6 +63,18 @@ class Boundary {
     shell = loadImage("shell.png");    
   }
   
+  void setCaracteristica(String _id, int _valor){
+    id = _id;
+    valor = _valor;
+  }
+   
+  String getId() {
+    return id;
+  }
+   
+  int getValor() {
+    return valor;
+  }
 
   // Draw the boundary, if it were at an angle we'd have to do something fancier
   void display() {
