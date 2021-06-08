@@ -66,7 +66,6 @@ void setup() {
   mE1.play();
   mE1.loop();
 
-
   bgEsc02 = loadImage("bgEsc02.png");
   loopingE1 = new Gif(this, "loopingE1.gif"); 
 
@@ -171,7 +170,7 @@ void escenario1() {
 
 void escenario2() {
   
-      
+  
   image(bgEsc02, width/2, height/2, width, height);
   arco.display();
   inclinada.display();
@@ -188,6 +187,10 @@ void escenario2() {
   //  home.display();
   //}
   
+  textSize(width/25);
+  textAlign(CENTER);
+  text("SCORE: "+puntos, width/2, height/7);
+  
   for (int i = 0; i < crabbies.size(); i++) {
     crabbies.get(i).display();
     if (crabbies.get(i).done()) {
@@ -198,11 +201,6 @@ void escenario2() {
   for (Windmill windmill : windmills) {
     windmill.display();
   }
-  
- 
-    textSize(width/25);
-    textAlign(CENTER);
-    text("SCORE: "+puntos, width/2, height/7);
 
   fr.display();
   fl.display();
