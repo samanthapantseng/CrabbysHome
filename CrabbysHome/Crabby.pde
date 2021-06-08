@@ -2,7 +2,7 @@ class Crabby {
 
   float x,y,r;
   PImage crabbyBola;
-  int puntos;
+  //int puntos;
   
   boolean delete = false;
   
@@ -45,12 +45,12 @@ class Crabby {
 
   }
   
-  void ganarPuntos (int _pts) {
-    puntos += _pts;
-  }
+  //void ganarPuntos (int _pts) {
+  //  puntos += _pts;
+  //}
   
   void shoot() {  
-    body.setLinearVelocity(new Vec2(0,-150));
+    body.setLinearVelocity(new Vec2(0,random (-250,-300)));
     body.setAngularVelocity(0);    
   }
 
@@ -85,8 +85,8 @@ class Crabby {
     popMatrix();
     image(crabbyBola,pos.x,pos.y);
     
-    textSize(width/25);
-    textAlign(CENTER);
-    text("SCORE: "+puntos, width/2, height/7);
+    //textSize(width/25);
+    //textAlign(CENTER);
+    //text("SCORE: "+puntos, width/2, height/7);
   }  
 }

@@ -15,8 +15,8 @@ import org.jbox2d.dynamics.contacts.*;
 import ddf.minim.*;
  
 Minim minim;
-//AudioPlayer ;
-//AudioSample ;
+AudioPlayer mE1, mE2;
+AudioSample sfxChoque, sfxObs;
 
 
 // A reference to our box2d world
@@ -48,16 +48,28 @@ Flipper fr;
 
 boolean lflip;
 boolean rflip;
-
+int puntos;
+  
 void setup() {
   size(504, 800);
   smooth();
   imageMode(CENTER);
   frameRate(60);
   
+  minim = new Minim(this);  
+  mE1 = minim.loadFile("mE1.mp3");
+  mE2 = minim.loadFile("mE2.mp3");
+    
+  sfxChoque = minim.loadSample("sfxChoque.mp3");
+  sfxObs = minim.loadSample("sfxObs.mp3");
+  
+  mE1.play();
+  mE1.loop();
+
+
   bgEsc02 = loadImage("bgEsc02.png");
   loopingE1 = new Gif(this, "loopingE1.gif"); 
-  
+
   // Initialize box2d physics and create the world
   box2d = new Box2DProcessing(this);
   box2d.createWorld();
@@ -143,10 +155,12 @@ void setup() {
 void draw() {
   box2d.step();
   
-  if (escenario == 1)
+  if (escenario == 1){
     escenario1();
-  else if (escenario == 2)
+  }
+  else if (escenario == 2){
     escenario2();
+  }
 }
 
 void escenario1() {    
@@ -155,8 +169,9 @@ void escenario1() {
 }
 
 
-void escenario2() {    
+void escenario2() {
   
+      
   image(bgEsc02, width/2, height/2, width, height);
   arco.display();
   inclinada.display();
@@ -184,6 +199,11 @@ void escenario2() {
     windmill.display();
   }
   
+ 
+    textSize(width/25);
+    textAlign(CENTER);
+    text("SCORE: "+puntos, width/2, height/7);
+
   fr.display();
   fl.display();
   
@@ -195,6 +215,10 @@ void escenario2() {
 void keyPressed() {    
   if (key == 's') {
     escenario = 2;
+    mE1.pause();
+    mE1.rewind();
+    mE2.play();
+    mE2.loop();
   }
   
   if (keyCode == RIGHT && rflip) {
@@ -224,6 +248,7 @@ void keyReleased( ) {
     lflip = true;
   }
 }
+  
 
 void beginContact(Contact cp) {
   // Get both fixtures
@@ -246,7 +271,9 @@ void beginContact(Contact cp) {
     Boundary tmpObs = (Boundary) o2;
     Crabby tmpCrabby = (Crabby) o1;
     if (tmpObs.getId().equals("obstaculo")){      
-      tmpCrabby.ganarPuntos(tmpObs.getValor());
+       puntos +=(tmpObs.getValor());
+      sfxChoque.trigger();        
+
     }
     if (tmpObs.isDelete() == true) {
       tmpCrabby.delete();
@@ -257,7 +284,9 @@ void beginContact(Contact cp) {
     Boundary tmpObs = (Boundary) o1;
     Crabby tmpCrabby = (Crabby) o2;    
     if (tmpObs.getId().equals("obstaculo")){
-      tmpCrabby.ganarPuntos(tmpObs.getValor());
+       puntos +=(tmpObs.getValor());
+      sfxChoque.trigger();        
+
     }
     if (tmpObs.isDelete() == true) {
       tmpCrabby.delete();
