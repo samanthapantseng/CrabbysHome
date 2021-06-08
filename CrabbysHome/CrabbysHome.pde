@@ -1,4 +1,4 @@
-//tarea#8 - Crabby's Home
+//tarea#9 - Crabby's Home
 //panSamantha - seguraElke
 
 import gifAnimation.*;
@@ -11,6 +11,13 @@ import org.jbox2d.collision.shapes.Shape;
 import org.jbox2d.common.*;
 import org.jbox2d.dynamics.*;
 import org.jbox2d.dynamics.contacts.*;
+
+import ddf.minim.*;
+ 
+Minim minim;
+//AudioPlayer ;
+//AudioSample ;
+
 
 // A reference to our box2d world
 Box2DProcessing box2d;
@@ -78,7 +85,35 @@ void setup() {
   obstaculos.add(new Boundary(100,200,8));
   obstaculos.add(new Boundary(50,340,8));
   obstaculos.add(new Boundary(width-170,height/2,8));
-  obstaculos.add(new Boundary(width-120,height-240,8));  
+  obstaculos.add(new Boundary(width-120,height-240,8));
+  
+  Boundary obstaculo1 = new Boundary(width-150,150,8);
+  obstaculo1.setCaracteristica("obstaculo",300);
+  obstaculos.add(obstaculo1);
+  
+  Boundary obstaculo2 = new Boundary(100,200,8);
+  obstaculo2.setCaracteristica("obstaculo",100);
+  obstaculos.add(obstaculo2);
+  
+  Boundary obstaculo3 = new Boundary(50,340,8);
+  obstaculo3.setCaracteristica("obstaculo",200);
+  obstaculos.add(obstaculo3);
+  
+  Boundary obstaculo4 = new Boundary(width-170,height/2,8);
+  obstaculo4.setCaracteristica("obstaculo",150);
+  obstaculos.add(obstaculo4);
+  
+  Boundary obstaculo5 = new Boundary(width-120,height-240,8);
+  obstaculo5.setCaracteristica("obstaculo",200);
+  obstaculos.add(obstaculo5);
+  
+  //crabs homes
+  //homes = new ArrayList<Surface>();
+  //homes.add(new Surface(240,450, 30, 0, 180));
+  //homes.add(new Surface(90,430, 30, 0, 180));
+  //homes.add(new Surface(160,270, 30, 0, 180));
+  //homes.add(new Surface(300,260, 30, 0, 180));
+  //homes.add(new Surface(230,120, 30, 0, 180));
   
   //Crabbies
   crabbies = new ArrayList<Crabby>();
@@ -98,7 +133,7 @@ void setup() {
   fl = new Flipper(width/2 - 120, height - 200, 25, -QUARTER_PI/2 - radians(15), QUARTER_PI - radians(20), true, 15, 10, 60);  
   rflip = false;
   
-  escenario = 2;
+  escenario = 1;
   
   font = createFont("crabbytype.ttf",width/50);
   textFont(font);
@@ -200,34 +235,23 @@ void beginContact(Contact cp) {
   Body b2 = f2.getBody();
 
   // Get our objects that reference these bodies
-  Object o1 = b1.getUserData();
+  Object o1 = b1.getUserData();  
   Object o2 = b2.getUserData();
   
-  //if (o1.getClass() == Crabby.class && o2.getClass() == Surface.class) {
-  //  Surface tmpHome = (Surface) o2;
-  //  if (tmpHome.getId().equals("home")){
-  //    Crabby tmpCrabby = (Crabby) o1;
-  //    tmpCrabby.ganarPuntos(tmpHome.getValor());
-  //  }   
-  //}
-  
-  //if (o1.getClass() == Surface.class && o2.getClass() == Crabby.class) {
-  //  Surface tmpHome = (Surface) o1;
-  //  if (tmpHome.getId().equals("home")){
-  //    Crabby tmpCrabby = (Crabby) o2;
-  //    tmpCrabby.ganarPuntos(tmpHome.getValor());
-  //  }
-  //}
-  
-  if (o1 == null || o2 == null){
-    return;
+
+  if (o1.getClass() == Crabby.class && o2.getClass() == Boundary.class) {
+    Boundary tmpObs = (Boundary) o2;
+    if (tmpObs.getId().equals("obstaculo")){
+      Crabby tmpCrabby = (Crabby) o1;
+      tmpCrabby.ganarPuntos(tmpObs.getValor());
+    }   
   }
   
   if (o1.getClass() == Boundary.class && o2.getClass() == Crabby.class) {
-    Crabby c = (Crabby) o2;
-    Boundary b = (Boundary) o1;
-    if (b.isDelete() == true) {
-      c.delete();
+    Boundary tmpObs = (Boundary) o1;
+    if (tmpObs.getId().equals("obstaculo")){
+      Crabby tmpCrabby = (Crabby) o2;
+      tmpCrabby.ganarPuntos(tmpObs.getValor());
     }
   }
   if (o2.getClass() == Boundary.class && o1.getClass() == Crabby.class) {
