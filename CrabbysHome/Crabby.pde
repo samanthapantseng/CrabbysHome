@@ -4,6 +4,8 @@ class Crabby {
   PImage crabbyBola;
   int puntos;
   
+  boolean delete = false;
+  
   Body body;
 
   Crabby(float x_,float y_ ,float r_) {
@@ -37,15 +39,37 @@ class Crabby {
     fd.restitution =0.5;
    
     body.createFixture(fd);
+ 
+    //body.setLinearVelocity(new Vec2(0,-150));
+    //body.setAngularVelocity(0);  
 
-    body.setLinearVelocity(new Vec2(0,-150));
-    body.setAngularVelocity(0);  
   }
   
   void ganarPuntos (int _pts) {
     puntos += _pts;
   }
   
+  void shoot() {  
+    body.setLinearVelocity(new Vec2(0,-150));
+    body.setAngularVelocity(0);    
+  }
+
+  void killBody() {
+    box2d.destroyBody(body);
+  }
+  
+  void delete() {
+    delete = true;  
+  }
+
+  boolean done() {
+    if (delete == true) {
+      killBody();
+      return true;
+    }
+    return false;
+  }
+
   void display() {
     
     Vec2 pos = box2d.getBodyPixelCoord(body);
@@ -64,6 +88,5 @@ class Crabby {
     textSize(width/25);
     textAlign(CENTER);
     text("SCORE: "+puntos, width/2, height/7);
-   }
-  
+  }  
 }

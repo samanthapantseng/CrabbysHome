@@ -24,12 +24,10 @@ class Flipper {
     
     makeBody(new Vec2(pX, pY), pLeft);
     body.setUserData(this); //for collision detection
-    if(pLeft)
-    {
+    if(pLeft) {
       speed = pSpeed;
     }
-    else
-    {
+    else {
       speed = -pSpeed; 
     }
     RevoluteJointDef rjd = new RevoluteJointDef();
@@ -46,8 +44,7 @@ class Flipper {
   
   
   //Methods
-  void makeBody(Vec2 center, boolean left)
-  {
+  void makeBody(Vec2 center, boolean left) {
     BodyDef bd = new BodyDef();
     bd.type = BodyType.DYNAMIC;
     bd.position.set(box2d.coordPixelsToWorld(center));
@@ -81,12 +78,10 @@ class Flipper {
     
     Vec2 pos = body.getPosition();
     float angle = body.getAngle();
-    if(left)
-    {
+    if(left) {
       body.setTransform(pos, angle + HALF_PI);
     }
-    else
-    {
+    else {
       body.setTransform(pos, angle - HALF_PI);
     }
     
@@ -100,8 +95,7 @@ class Flipper {
     anchor.createFixture(anchBod, 1.0);
   }
   
-  void display()
-  {
+  void display() {
     Vec2 pos = box2d.getBodyPixelCoord(body);
     float a = body.getAngle();
     

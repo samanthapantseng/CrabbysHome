@@ -12,7 +12,6 @@ import org.jbox2d.common.*;
 import org.jbox2d.dynamics.*;
 import org.jbox2d.dynamics.contacts.*;
 
-
 // A reference to our box2d world
 Box2DProcessing box2d;
 
@@ -44,7 +43,7 @@ boolean lflip;
 boolean rflip;
 
 void setup() {
-  size(504, 702);
+  size(504, 800);
   smooth();
   imageMode(CENTER);
   frameRate(60);
@@ -58,20 +57,20 @@ void setup() {
   box2d.listenForCollisions();
   box2d.setGravity(0, -20);
   
-  // Add some boundaries
+  //Paredes
   arco = new Surface(width/2, 255, 250, 180, 360);
   paredes = new ArrayList<Boundary>();
-  paredes.add(new Boundary(width/2,height-5,width,10,7));
-  paredes.add(new Boundary(width-5,height/2,10,height,7));
-  paredes.add(new Boundary(5,height/2,10,height,7));
-  //Barra cañon de disparo
-  paredes.add(new Boundary(width-80,height/2+60,10,350,7));
-  //Barras de puntaje
-  //paredes.add(new Boundary(width/4-30,height-150,10,70,7));
-  //paredes.add(new Boundary(width/2-50,height-150,10,70,7));
-  //paredes.add(new Boundary(width-190,height-150,10,70,7));
+  paredes.add(new Boundary(width/2,height-5,width,10,7, false));
+  paredes.add(new Boundary(width-5,height/2,10,height,7, false));
+  paredes.add(new Boundary(5,height/2,10,height,7, false));
+  //Cañon de disparo
+  paredes.add(new Boundary(width-80,height/2+105,10,350,7, false));  
+  //Barra delete
+  paredes.add(new Boundary(0, height/2+270,2*width-180,10,7, true));
+  //Barra secreta
+  paredes.add(new Boundary(0, height/2+280,2*width-180,1,7, false));
   //Barra inclinada
-  //inclinada = new Surface();
+  inclinada = new Surface();
   
   //conchas-obstaculos
   obstaculos = new ArrayList<Boundary>();
@@ -79,38 +78,15 @@ void setup() {
   obstaculos.add(new Boundary(100,200,8));
   obstaculos.add(new Boundary(50,340,8));
   obstaculos.add(new Boundary(width-170,height/2,8));
-  obstaculos.add(new Boundary(width-120,height-240,8));
-  
-  
-  //crabs homes
-  homes = new ArrayList<Surface>();
-  //Surface home1 = new Surface(240,450, 30, 0, 180);
-  //home1.setCaracteristica("home",300);
-  //homes.add(home1);
-  
-  //Surface home2 = new Surface(90,430, 30, 0, 180);
-  //home2.setCaracteristica("home",200);
-  //homes.add(home2);
-  
-  //Surface home3 = new Surface(160,270, 30, 0, 180);
-  //home3.setCaracteristica("home",150);
-  //homes.add(home3);
-  
-  //Surface home4 = new Surface(300,260, 30, 0, 180);
-  //home4.setCaracteristica("home",200);
-  //homes.add(home4);
-  
-  //Surface home5 = new Surface(230,120, 30, 0, 180);
-  //home5.setCaracteristica("home",100);
-  //homes.add(home5);
+  obstaculos.add(new Boundary(width-120,height-240,8));  
   
   //Crabbies
   crabbies = new ArrayList<Crabby>();
-  crabbies.add (new Crabby(width-40,height-40,30));
-  //crabbies.add (new Crabby(width-70,height-40,30));
-  //crabbies.add (new Crabby(width-100,height-40,30));
-  //crabbies.add (new Crabby(width-130,height-40,30));
-  //crabbies.add (new Crabby(width-160,height-40,30));
+  crabbies.add (new Crabby(width-50,height-80,30));
+  crabbies.add (new Crabby(width-100,height-80,30));
+  crabbies.add (new Crabby(width-150,height-80,30));
+  crabbies.add (new Crabby(width-200,height-80,30));
+  crabbies.add (new Crabby(width-250 ,height-80,30));
   
   //windmills
   windmills = new ArrayList<Windmill>();  
@@ -118,8 +94,8 @@ void setup() {
   windmills.add (new Windmill(width/9, 480, 1));  
   
   //flippers
-  fr = new Flipper(width/2 + 70, height - 120, 25, -QUARTER_PI/2, QUARTER_PI, false, 15, 10, 60);
-  fl = new Flipper(width/2 - 120, height - 120, 25, -QUARTER_PI/2 - radians(15), QUARTER_PI - radians(20), true, 15, 10, 60);  
+  fr = new Flipper(width/2 + 70, height - 200, 25, -QUARTER_PI/2, QUARTER_PI, false, 15, 10, 60);
+  fl = new Flipper(width/2 - 120, height - 200, 25, -QUARTER_PI/2 - radians(15), QUARTER_PI - radians(20), true, 15, 10, 60);  
   rflip = false;
   
   escenario = 2;
@@ -148,24 +124,28 @@ void escenario2() {
   
   image(bgEsc02, width/2, height/2, width, height);
   arco.display();
+  inclinada.display();
   
   for (Boundary pared : paredes) {
     pared.display();
   }
   
-   for (Boundary obs : obstaculos) {
+  for (Boundary obs : obstaculos) {
     obs.display();
   }
   
-  for (Surface home : homes) {
-    home.display();
-  }
+  //for (Surface home : homes) {
+  //  home.display();
+  //}
   
-   for (Crabby crabbie : crabbies) {
-    crabbie.display();
+  for (int i = 0; i < crabbies.size(); i++) {
+    crabbies.get(i).display();
+    if (crabbies.get(i).done()) {
+      crabbies.remove(i);
+    }
   }  
   
-   for (Windmill windmill : windmills) {
+  for (Windmill windmill : windmills) {
     windmill.display();
   }
   
@@ -182,18 +162,23 @@ void keyPressed() {
     escenario = 2;
   }
   
-  if(keyCode == RIGHT && rflip) {
+  if (keyCode == RIGHT && rflip) {
     fr.reverseSpeed();
     rflip = false;
   }
   
-  if(keyCode == LEFT && lflip) {
+  if (keyCode == LEFT && lflip) {
     fl.reverseSpeed();
     lflip = false;
   }
+  
+  
+  if (keyCode == ' ') {
+    crabbies.get(0).shoot();   
+  }
 }
 
-void keyReleased( ){
+void keyReleased( ) {
   if(keyCode == RIGHT && rflip) {
     fr.reverseSpeed();
     rflip = true;
@@ -217,24 +202,43 @@ void beginContact(Contact cp) {
   // Get our objects that reference these bodies
   Object o1 = b1.getUserData();
   Object o2 = b2.getUserData();
-
-  if (o1.getClass() == Crabby.class && o2.getClass() == Surface.class) {
-    Surface tmpHome = (Surface) o2;
-    if (tmpHome.getId().equals("home")){
-      Crabby tmpCrabby = (Crabby) o1;
-      tmpCrabby.ganarPuntos(tmpHome.getValor());
-    }   
+  
+  //if (o1.getClass() == Crabby.class && o2.getClass() == Surface.class) {
+  //  Surface tmpHome = (Surface) o2;
+  //  if (tmpHome.getId().equals("home")){
+  //    Crabby tmpCrabby = (Crabby) o1;
+  //    tmpCrabby.ganarPuntos(tmpHome.getValor());
+  //  }   
+  //}
+  
+  //if (o1.getClass() == Surface.class && o2.getClass() == Crabby.class) {
+  //  Surface tmpHome = (Surface) o1;
+  //  if (tmpHome.getId().equals("home")){
+  //    Crabby tmpCrabby = (Crabby) o2;
+  //    tmpCrabby.ganarPuntos(tmpHome.getValor());
+  //  }
+  //}
+  
+  if (o1 == null || o2 == null){
+    return;
   }
   
-  if (o1.getClass() == Surface.class && o2.getClass() == Crabby.class) {
-    Surface tmpHome = (Surface) o1;
-    if (tmpHome.getId().equals("home")){
-      Crabby tmpCrabby = (Crabby) o2;
-      tmpCrabby.ganarPuntos(tmpHome.getValor());
+  if (o1.getClass() == Boundary.class && o2.getClass() == Crabby.class) {
+    Crabby c = (Crabby) o2;
+    Boundary b = (Boundary) o1;
+    if (b.isDelete() == true) {
+      c.delete();
     }
   }
+  if (o2.getClass() == Boundary.class && o1.getClass() == Crabby.class) {
+    Crabby c = (Crabby) o1;
+    Boundary b = (Boundary) o2;
+    if (b.isDelete() == true) {
+      c.delete();
+    }
+  }  
 }
 
-// Objects stop touching each other
-//void endContact(Contact cp) {
-//}
+ //Objects stop touching each other
+void endContact(Contact cp) {
+}

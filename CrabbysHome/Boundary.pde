@@ -7,16 +7,18 @@ class Boundary {
   float r;
   float c;
   PImage shell;
+  boolean delete;
     
   Body b;
 
-  Boundary(float x_,float y_, float w_, float h_, float c_) {
+  Boundary(float x_,float y_, float w_, float h_, float c_, boolean delete_) {
     x = x_;
     y = y_;
     w = w_;
     h = h_;
     r = 0;
     c = c_;
+    delete = delete_;
 
     // Define the polygon
     PolygonShape sd = new PolygonShape();
@@ -77,5 +79,9 @@ class Boundary {
       circle(x,y,r*2);
       image(shell,x,y);
     }
+  }
+  
+  boolean isDelete() {
+    return delete;
   }
 }
