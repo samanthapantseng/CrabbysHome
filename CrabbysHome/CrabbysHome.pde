@@ -238,28 +238,30 @@ void beginContact(Contact cp) {
   Object o1 = b1.getUserData();  
   Object o2 = b2.getUserData();
   
+  if (o1 == null || o2 == null) {
+    return;
+  }
 
   if (o1.getClass() == Crabby.class && o2.getClass() == Boundary.class) {
     Boundary tmpObs = (Boundary) o2;
-    if (tmpObs.getId().equals("obstaculo")){
-      Crabby tmpCrabby = (Crabby) o1;
+    Crabby tmpCrabby = (Crabby) o1;
+    if (tmpObs.getId().equals("obstaculo")){      
       tmpCrabby.ganarPuntos(tmpObs.getValor());
-    }   
+    }
+    if (tmpObs.isDelete() == true) {
+      tmpCrabby.delete();
+    }        
   }
   
   if (o1.getClass() == Boundary.class && o2.getClass() == Crabby.class) {
     Boundary tmpObs = (Boundary) o1;
+    Crabby tmpCrabby = (Crabby) o2;    
     if (tmpObs.getId().equals("obstaculo")){
-      Crabby tmpCrabby = (Crabby) o2;
       tmpCrabby.ganarPuntos(tmpObs.getValor());
     }
-  }
-  if (o2.getClass() == Boundary.class && o1.getClass() == Crabby.class) {
-    Crabby c = (Crabby) o1;
-    Boundary b = (Boundary) o2;
-    if (b.isDelete() == true) {
-      c.delete();
-    }
+    if (tmpObs.isDelete() == true) {
+      tmpCrabby.delete();
+    }     
   }  
 }
 
