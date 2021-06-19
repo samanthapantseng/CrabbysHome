@@ -16,7 +16,7 @@ import ddf.minim.*;
  
 Minim minim;
 AudioPlayer mE1, mE2;
-AudioSample sfxChoque, sfxObs;
+AudioSample sfxChoque, sfxStarfish, sfxShoot;
 
 
 // A reference to our box2d world
@@ -31,10 +31,8 @@ PImage bgEsc02;
 int escenario;
 
 ArrayList<Boundary> paredes;
-
 ArrayList<Boundary> obstaculos;
 
-ArrayList<Surface> homes;
 Surface arco;
 Surface inclinada;
 
@@ -65,7 +63,8 @@ void setup() {
   mE2 = minim.loadFile("mE2.mp3");
     
   sfxChoque = minim.loadSample("sfxChoque.mp3");
-  sfxObs = minim.loadSample("sfxObs.mp3");
+  sfxStarfish = minim.loadSample("sfxStarfish.mp3");
+  sfxShoot = minim.loadSample("sfxShoot.mp3");
   
   mE1.play();
   mE1.loop();
@@ -95,40 +94,18 @@ void setup() {
   inclinada = new Surface();
   
   //conchas-obstaculos
-  obstaculos = new ArrayList<Boundary>();
-  obstaculos.add(new Boundary(width-150,150,8));
-  obstaculos.add(new Boundary(100,200,8));
-  obstaculos.add(new Boundary(50,340,8));
-  obstaculos.add(new Boundary(width-170,height/2,8));
-  obstaculos.add(new Boundary(width-120,height-240,8));
-  
-  Boundary obstaculo1 = new Boundary(width-150,150,8);
-  obstaculo1.setCaracteristica("obstaculo",300);
-  obstaculos.add(obstaculo1);
-  
-  Boundary obstaculo2 = new Boundary(100,200,8);
-  obstaculo2.setCaracteristica("obstaculo",100);
-  obstaculos.add(obstaculo2);
-  
-  Boundary obstaculo3 = new Boundary(50,340,8);
-  obstaculo3.setCaracteristica("obstaculo",200);
-  obstaculos.add(obstaculo3);
-  
-  Boundary obstaculo4 = new Boundary(width-170,height/2,8);
-  obstaculo4.setCaracteristica("obstaculo",150);
-  obstaculos.add(obstaculo4);
-  
-  Boundary obstaculo5 = new Boundary(width-120,height-240,8);
-  obstaculo5.setCaracteristica("obstaculo",200);
-  obstaculos.add(obstaculo5);
-  
-  //crabs homes
-  //homes = new ArrayList<Surface>();
-  //homes.add(new Surface(240,450, 30, 0, 180));
-  //homes.add(new Surface(90,430, 30, 0, 180));
-  //homes.add(new Surface(160,270, 30, 0, 180));
-  //homes.add(new Surface(300,260, 30, 0, 180));
-  //homes.add(new Surface(230,120, 30, 0, 180));
+  obstaculos = new ArrayList<Boundary>(); 
+  obstaculos.add(new Boundary(width-150,150,8,"obstaculo",10));  
+  obstaculos.add(new Boundary(width/2.5,350,8,"obstaculo",10));  
+  obstaculos.add(new Boundary(50,340,8,"obstaculo",10));
+  obstaculos.add(new Boundary(width-170,height/2,8,"obstaculo",10));
+  obstaculos.add(new Boundary(width-120,height-240,8,"obstaculo",10));
+
+  //estrellas-obstaculos
+  obstaculos.add(new Boundary(width/4,200,8,"estrella",50));
+  obstaculos.add(new Boundary(width/2,height-340,8,"estrella",50));
+ 
+  //teletrasnportadores-obstaculos
   
   //Crabbies
   crabbies = new ArrayList<Crabby>();
@@ -188,11 +165,7 @@ void escenario2() {
   for (Boundary obs : obstaculos) {
     obs.display();
   }
-  
-  //for (Surface home : homes) {
-  //  home.display();
-  //}
-  
+
   textSize(width/25);
   textAlign(CENTER);
   text("SCORE: "+puntos, width/2, height/7);
@@ -235,7 +208,7 @@ void keyPressed() {
     lflip = false;
   }  
   
-  if (key == ' ') {
+  if (key == ' ' & escenario == 2) {
     if (disparando == false) {
       keyDown = millis();
       disparando = true;   
@@ -244,11 +217,13 @@ void keyPressed() {
 }
 
 void keyReleased( ) {
-  if (key == ' ') {
+  if (key == ' ' & escenario == 2) {
+    
     keyUp = millis();
     long difeTiempo = keyUp - keyDown;
-    float potencia = map(constrain(difeTiempo, 0 , 7000), 0, 7000, 50, 150);    
+    float potencia = map(constrain(difeTiempo, 0 , 7000), 0, 7000, 75, 175);    
     crabbies.get(0).shoot(potencia);
+    sfxShoot.trigger();
     disparando = false;
   }
   
@@ -285,9 +260,16 @@ void beginContact(Contact cp) {
     Crabby tmpCrabby = (Crabby) o1;
     if (tmpObs.getId().equals("obstaculo")){      
        puntos +=(tmpObs.getValor());
-      sfxChoque.trigger();        
-
+       tmpObs.animar();
+       sfxChoque.trigger();        
     }
+    else if  (tmpObs.getId().equals("estrella")){      
+       puntos +=(tmpObs.getValor());
+       tmpObs.animar();
+       sfxStarfish.trigger();        
+    }
+      
+    
     if (tmpObs.isDelete() == true) {
       tmpCrabby.delete();
     }        
@@ -298,9 +280,16 @@ void beginContact(Contact cp) {
     Crabby tmpCrabby = (Crabby) o2;    
     if (tmpObs.getId().equals("obstaculo")){
        puntos +=(tmpObs.getValor());
-      sfxChoque.trigger();        
-
+       tmpObs.animar();
+       sfxChoque.trigger();        
     }
+    else if  (tmpObs.getId().equals("estrella")){      
+       puntos +=(tmpObs.getValor());
+       tmpObs.animar();
+       sfxStarfish.trigger();        
+    }
+    
+    
     if (tmpObs.isDelete() == true) {
       tmpCrabby.delete();
     }     

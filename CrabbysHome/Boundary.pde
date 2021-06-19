@@ -6,9 +6,9 @@ class Boundary {
   float h;
   float r;
   float c;
-  PImage shell;
   boolean delete;
   
+  SpriteSheet animacion;
   String id = "";
   int valor = 0;
     
@@ -42,13 +42,22 @@ class Boundary {
     b.setUserData(this);
   }
   
-   Boundary(float x_,float y_, float r_) {
+   Boundary(float x_,float y_, float r_,String _id, int _valor) {
     x = x_;
     y = y_;
     r = r_;
     w = 0;
     h = 0;
     c = 0;
+    id = _id;
+    valor = _valor;
+    
+    if (id.equals("obstaculo")) {
+      animacion = new SpriteSheet("shell_", 15, "png");}
+    else if (id.equals("estrella")){
+      animacion = new SpriteSheet("starfish_", 34, "png");
+    }
+    animacion.noLoop();
     
     CircleShape cs = new CircleShape();
     cs.m_radius = box2d.scalarPixelsToWorld(r);
@@ -61,13 +70,7 @@ class Boundary {
     
     b.createFixture(cs,1);
     b.setUserData(this);
-    
-    shell = loadImage("shell.png");    
-  }
-  
-  void setCaracteristica(String _id, int _valor){
-    id = _id;
-    valor = _valor;
+     
   }
    
   String getId() {
@@ -77,22 +80,29 @@ class Boundary {
   int getValor() {
     return valor;
   }
+  
+  void animar() {
+    animacion.play();
+  }
 
   // Draw the boundary, if it were at an angle we'd have to do something fancier
   void display() {
     
     noStroke();
-    
-    if (r == 0) {
-      fill(#c1b376);
-      rectMode(CENTER);
-      rect(x,y,w,h,c);
+    if (id.isEmpty()) {
+      if (r == 0) {
+        fill(#c1b376);
+        rectMode(CENTER);
+        rect(x,y,w,h,c);
+      }  
     }
     else {
       noFill();
       ellipseMode(CENTER);
       circle(x,y,r*2);
-      image(shell,x,y);
+      imageMode(CENTER);
+      animacion.display(x,y);
+    
     }
   }
   

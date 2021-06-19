@@ -34,9 +34,9 @@ class Crabby {
     fd.shape = cs;
     
     //Parameters that affect physics
-    fd.density =1;
-    fd.friction = 0.3;
-    fd.restitution =0.5;
+    fd.density =0.5;
+    fd.friction = 0.03;
+    fd.restitution =0.75;
    
     body.createFixture(fd);
 
