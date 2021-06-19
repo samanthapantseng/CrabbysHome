@@ -16,7 +16,7 @@ import ddf.minim.*;
  
 Minim minim;
 AudioPlayer mE1, mE2;
-AudioSample sfxChoque, sfxStarfish, sfxShoot;
+AudioSample sfxChoque, sfxStarfish, sfxShoot, sfxhome;
 
 
 // A reference to our box2d world
@@ -65,6 +65,7 @@ void setup() {
   sfxChoque = minim.loadSample("sfxChoque.mp3");
   sfxStarfish = minim.loadSample("sfxStarfish.mp3");
   sfxShoot = minim.loadSample("sfxShoot.mp3");
+  sfxhome = minim.loadSample("sfxShoot.mp3");
   
   mE1.play();
   mE1.loop();
@@ -95,17 +96,19 @@ void setup() {
   
   //conchas-obstaculos
   obstaculos = new ArrayList<Boundary>(); 
-  obstaculos.add(new Boundary(width-150,150,8,"obstaculo",10));  
-  obstaculos.add(new Boundary(width/2.5,350,8,"obstaculo",10));  
-  obstaculos.add(new Boundary(50,340,8,"obstaculo",10));
-  obstaculos.add(new Boundary(width-170,height/2,8,"obstaculo",10));
-  obstaculos.add(new Boundary(width-120,height-240,8,"obstaculo",10));
+  obstaculos.add(new Boundary(width-150,150,8,"obstaculo",20));  
+  obstaculos.add(new Boundary(width/2.5,350,8,"obstaculo",20));  
+  obstaculos.add(new Boundary(50,340,8,"obstaculo",20));
+  obstaculos.add(new Boundary(width-170,height/2,8,"obstaculo",20));
+  obstaculos.add(new Boundary(width-120,height-240,8,"obstaculo",20));
 
   //estrellas-obstaculos
   obstaculos.add(new Boundary(width/4,200,8,"estrella",50));
   obstaculos.add(new Boundary(width/2,height-340,8,"estrella",50));
  
   //teletrasnportadores-obstaculos
+  obstaculos.add(new Boundary(width/2,height/4,10,"home",-10));
+  obstaculos.add(new Boundary(width-130,height-320,10,"home",-10));
   
   //Crabbies
   crabbies = new ArrayList<Crabby>();
@@ -175,7 +178,13 @@ void escenario2() {
     if (crabbies.get(i).done()) {
       crabbies.remove(i);
     }
-  }  
+  } 
+ 
+ for (Crabby crabbie : crabbies) {
+    if (crabbie.getActivarPortal()){
+      crabbie.portal(width/2,height/4);
+    }
+  }
   
   for (Windmill windmill : windmills) {
     windmill.display();
@@ -268,6 +277,13 @@ void beginContact(Contact cp) {
        tmpObs.animar();
        sfxStarfish.trigger();        
     }
+    
+    else if  (tmpObs.getId().equals("home")){
+       tmpCrabby.teletransportar();
+       puntos +=(tmpObs.getValor());
+       tmpObs.animar();
+       sfxhome.trigger();        
+    }
       
     
     if (tmpObs.isDelete() == true) {
@@ -287,6 +303,12 @@ void beginContact(Contact cp) {
        puntos +=(tmpObs.getValor());
        tmpObs.animar();
        sfxStarfish.trigger();        
+    }
+    else if  (tmpObs.getId().equals("home")){
+       tmpCrabby.teletransportar();
+       puntos +=(tmpObs.getValor());
+       tmpObs.animar();
+       sfxhome.trigger();        
     }
     
     

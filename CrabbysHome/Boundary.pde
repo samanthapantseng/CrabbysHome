@@ -57,6 +57,9 @@ class Boundary {
     else if (id.equals("estrella")){
       animacion = new SpriteSheet("starfish_", 34, "png");
     }
+    else if (id.equals("home")){
+      animacion = new SpriteSheet("home_", 13, "png");
+    }
     animacion.noLoop();
     
     CircleShape cs = new CircleShape();

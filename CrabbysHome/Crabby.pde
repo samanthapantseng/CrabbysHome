@@ -5,6 +5,7 @@ class Crabby {
   //int puntos;
   
   boolean delete = false;
+  boolean activarPortal;
   
   Body body;
 
@@ -13,10 +14,28 @@ class Crabby {
     y = y_;
     r = r_;
     
+    activarPortal = false;
+    
     makeBody(new Vec2(x,y),r);
     body.setUserData(this);
     crabbyBola = loadImage("crabbyBola.png");    
   }
+  
+  void teletransportar() {
+    activarPortal = true;
+  }
+  
+  boolean getActivarPortal() {
+    return activarPortal;
+  }
+  
+  void portal(float _x, float _y) {
+    body.setTransform(box2d.coordPixelsToWorld(new Vec2(_x, _y)), 0);
+    activarPortal = false;
+  }
+
+ 
+
 
   void makeBody(Vec2 center, float r){
     
@@ -42,9 +61,6 @@ class Crabby {
 
   }
   
-  //void ganarPuntos (int _pts) {
-  //  puntos += _pts;
-  //}
   
   void shoot(float potencia) {  
     body.setLinearVelocity(new Vec2(0, potencia));
