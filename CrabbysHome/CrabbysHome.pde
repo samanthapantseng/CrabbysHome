@@ -48,8 +48,12 @@ Flipper fr;
 
 boolean lflip;
 boolean rflip;
+
 int puntos;
-  
+
+long keyDown, keyUp;
+boolean disparando;
+
 void setup() {
   size(504, 800);
   smooth();
@@ -148,6 +152,8 @@ void setup() {
   
   font = createFont("crabbytype.ttf",width/50);
   textFont(font);
+  
+  disparando = false;
 }
 
 
@@ -227,15 +233,25 @@ void keyPressed() {
   if (keyCode == LEFT && lflip) {
     fl.reverseSpeed();
     lflip = false;
-  }
+  }  
   
-  
-  if (keyCode == ' ') {
-    crabbies.get(0).shoot();   
+  if (key == ' ') {
+    if (disparando == false) {
+      keyDown = millis();
+      disparando = true;   
+    }  
   }
 }
 
 void keyReleased( ) {
+  if (key == ' ') {
+    keyUp = millis();
+    long difeTiempo = keyUp - keyDown;
+    float potencia = map(constrain(difeTiempo, 0 , 7000), 0, 7000, 50, 150);    
+    crabbies.get(0).shoot(potencia);
+    disparando = false;
+  }
+  
   if(keyCode == RIGHT && rflip) {
     fr.reverseSpeed();
     rflip = true;
@@ -247,7 +263,6 @@ void keyReleased( ) {
   }
 }
   
-
 void beginContact(Contact cp) {
   // Get both fixtures
   Fixture f1 = cp.getFixtureA();

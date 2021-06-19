@@ -39,9 +39,6 @@ class Crabby {
     fd.restitution =0.5;
    
     body.createFixture(fd);
- 
-    //body.setLinearVelocity(new Vec2(0,-150));
-    //body.setAngularVelocity(0);  
 
   }
   
@@ -49,9 +46,9 @@ class Crabby {
   //  puntos += _pts;
   //}
   
-  void shoot() {  
-    body.setLinearVelocity(new Vec2(0,random (-250,-300)));
-    body.setAngularVelocity(0);    
+  void shoot(float potencia) {  
+    body.setLinearVelocity(new Vec2(0, potencia));
+    body.setAngularVelocity(random(-10, 10));    
   }
 
   void killBody() {
