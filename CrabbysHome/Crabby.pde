@@ -6,6 +6,8 @@ class Crabby {
   
   boolean delete = false;
   boolean activarPortal;
+  long instante;
+  int espera;
   
   Body body;
 
@@ -18,10 +20,18 @@ class Crabby {
     
     makeBody(new Vec2(x,y),r);
     body.setUserData(this);
-    crabbyBola = loadImage("crabbyBola.png");    
+    crabbyBola = loadImage("crabbyBola.png");  
+    
+    espera = 1500;
+    instante = millis();
   }
   
   void teletransportar() {
+    if (millis() - instante < espera) {
+      return;   
+    }
+    
+    instante = millis();
     activarPortal = true;
   }
   
@@ -33,9 +43,6 @@ class Crabby {
     body.setTransform(box2d.coordPixelsToWorld(new Vec2(_x, _y)), 0);
     activarPortal = false;
   }
-
- 
-
 
   void makeBody(Vec2 center, float r){
     
@@ -74,6 +81,14 @@ class Crabby {
   void delete() {
     delete = true;  
   }
+  
+  //float getPosY() {
+  //  return y;
+  //} 
+  
+  //float getPosX() {
+  //  return x;
+  //} 
 
   boolean done() {
     if (delete == true) {
@@ -82,6 +97,7 @@ class Crabby {
     }
     return false;
   }
+  
 
   void display() {
     

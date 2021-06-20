@@ -75,6 +75,10 @@ class Boundary {
     b.setUserData(this);
      
   }
+  
+  float getPos() {
+    return y;
+  } 
    
   String getId() {
     return id;

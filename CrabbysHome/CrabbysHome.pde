@@ -15,8 +15,8 @@ import org.jbox2d.dynamics.contacts.*;
 import ddf.minim.*;
  
 Minim minim;
-AudioPlayer mE1, mE2;
-AudioSample sfxChoque, sfxStarfish, sfxShoot, sfxhome;
+AudioPlayer mE1, mE2, mE3;
+AudioSample sfxChoque, sfxStarfish, sfxShoot, sfxHome;
 
 
 // A reference to our box2d world
@@ -44,6 +44,7 @@ Windmill windmill;
 Flipper fl;
 Flipper fr;
 
+String posHome;
 boolean lflip;
 boolean rflip;
 
@@ -61,11 +62,12 @@ void setup() {
   minim = new Minim(this);  
   mE1 = minim.loadFile("mE1.mp3");
   mE2 = minim.loadFile("mE2.mp3");
+  mE3 = minim.loadFile("mE3.mp3");
     
   sfxChoque = minim.loadSample("sfxChoque.mp3");
   sfxStarfish = minim.loadSample("sfxStarfish.mp3");
   sfxShoot = minim.loadSample("sfxShoot.mp3");
-  sfxhome = minim.loadSample("sfxShoot.mp3");
+  sfxHome = minim.loadSample("sfxHome.mp3");
   
   mE1.play();
   mE1.loop();
@@ -106,7 +108,7 @@ void setup() {
   obstaculos.add(new Boundary(width/4,200,8,"estrella",50));
   obstaculos.add(new Boundary(width/2,height-340,8,"estrella",50));
  
-  //teletrasnportadores-obstaculos
+  //portal-obstaculos
   obstaculos.add(new Boundary(width/2,height/4,10,"home",-10));
   obstaculos.add(new Boundary(width-130,height-320,10,"home",-10));
   
@@ -182,7 +184,13 @@ void escenario2() {
  
  for (Crabby crabbie : crabbies) {
     if (crabbie.getActivarPortal()){
-      crabbie.portal(width/2,height/4);
+       if (posHome == "a"){
+          crabbie.portal(width/2,height/4);   
+       }
+       
+       else if (posHome == "b"){
+          crabbie.portal(width-130,height-320);    
+       }
     }
   }
   
@@ -217,7 +225,7 @@ void keyPressed() {
     lflip = false;
   }  
   
-  if (key == ' ' & escenario == 2) {
+  if (key == ' ' && escenario == 2) {
     if (disparando == false) {
       keyDown = millis();
       disparando = true;   
@@ -225,8 +233,9 @@ void keyPressed() {
   }
 }
 
+
 void keyReleased( ) {
-  if (key == ' ' & escenario == 2) {
+  if (key == ' ' && escenario == 2) {
     
     keyUp = millis();
     long difeTiempo = keyUp - keyDown;
@@ -282,7 +291,14 @@ void beginContact(Contact cp) {
        tmpCrabby.teletransportar();
        puntos +=(tmpObs.getValor());
        tmpObs.animar();
-       sfxhome.trigger();        
+       sfxHome.trigger(); 
+       if (tmpObs.getPos() > height/2 ){
+         posHome = "a";
+       }
+       
+       else if (tmpObs.getPos() < height/2 ){
+         posHome = "b";
+       }
     }
       
     
@@ -308,7 +324,14 @@ void beginContact(Contact cp) {
        tmpCrabby.teletransportar();
        puntos +=(tmpObs.getValor());
        tmpObs.animar();
-       sfxhome.trigger();        
+       sfxHome.trigger();
+       if (tmpObs.getPos() > height/2 ){
+         posHome = "a";
+       }
+       
+       else if (tmpObs.getPos() < height/2 ){
+         posHome = "b";
+       }
     }
     
     
