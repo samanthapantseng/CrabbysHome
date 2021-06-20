@@ -1,4 +1,4 @@
-//tarea#9 - Crabby's Home
+//proyecto final - Crabby's Home
 //panSamantha - seguraElke
 
 import gifAnimation.*;
@@ -18,7 +18,6 @@ Minim minim;
 AudioPlayer mE1, mE2, mE3;
 AudioSample sfxChoque, sfxStarfish, sfxShoot, sfxHome;
 
-
 // A reference to our box2d world
 Box2DProcessing box2d;
 
@@ -26,8 +25,12 @@ PFont font;
 
 PImage[] animation;
 Gif loopingE1;
+Gif loopingE3;
 
-PImage bgEsc02;
+long instanteRestart;
+int esperaRestart;
+
+PImage E2;
 int escenario;
 
 ArrayList<Boundary> paredes;
@@ -72,9 +75,10 @@ void setup() {
   mE1.play();
   mE1.loop();
 
-  bgEsc02 = loadImage("bgEsc02.png");
+  E2 = loadImage("E2.png");
   loopingE1 = new Gif(this, "loopingE1.gif"); 
-
+  loopingE3 = new Gif(this, "loopingE3.gif");
+  
   // Initialize box2d physics and create the world
   box2d = new Box2DProcessing(this);
   box2d.createWorld();
@@ -92,7 +96,7 @@ void setup() {
   //Barra delete
   paredes.add(new Boundary(0, height/2+270,2*width-180,10,7, true));
   //Barra secreta
-  paredes.add(new Boundary(0, height/2+280,2*width-180,1,7, false));
+  paredes.add(new Boundary(0, height/2+280,2*width-180,0.1 ,7, false));
   //Barra inclinada
   inclinada = new Surface();
   
@@ -114,11 +118,11 @@ void setup() {
   
   //Crabbies
   crabbies = new ArrayList<Crabby>();
-  crabbies.add (new Crabby(width-50,height-80,30));
+  crabbies.add (new Crabby(width-40,height-80,30));
   crabbies.add (new Crabby(width-100,height-80,30));
   crabbies.add (new Crabby(width-150,height-80,30));
-  crabbies.add (new Crabby(width-200,height-80,30));
-  crabbies.add (new Crabby(width-250 ,height-80,30));
+  //crabbies.add (new Crabby(width-200,height-80,30));
+  //crabbies.add (new Crabby(width-250 ,height-80,30));
   
   //windmills
   windmills = new ArrayList<Windmill>();  
@@ -136,18 +140,20 @@ void setup() {
   textFont(font);
   
   disparando = false;
+  
+  esperaRestart = 16500;
 }
 
 
 void draw() {
   box2d.step();
   
-  if (escenario == 1){
+  if (escenario == 1)
     escenario1();
-  }
-  else if (escenario == 2){
+  else if (escenario == 2)
     escenario2();
-  }
+  else if (escenario == 3)
+    escenario3();
 }
 
 void escenario1() {    
@@ -155,11 +161,9 @@ void escenario1() {
   image(loopingE1, width/2, height/2, width, height);
 }
 
-
-void escenario2() {
+void escenario2() {  
   
-  
-  image(bgEsc02, width/2, height/2, width, height);
+  image(E2, width/2, height/2, width, height);
   arco.display();
   inclinada.display();
   
@@ -182,15 +186,14 @@ void escenario2() {
     }
   } 
  
- for (Crabby crabbie : crabbies) {
-    if (crabbie.getActivarPortal()){
-       if (posHome == "a"){
-          crabbie.portal(width/2,height/4);   
-       }
-       
-       else if (posHome == "b"){
-          crabbie.portal(width-130,height-320);    
-       }
+  for (Crabby crabbie : crabbies) {
+    if (crabbie.getActivarPortal()) {
+      if (posHome == "a") {
+        crabbie.portal(width/2, height/4);   
+      }       
+      else if (posHome == "b") {
+        crabbie.portal(width-130, height-320);    
+      }
     }
   }
   
@@ -202,12 +205,38 @@ void escenario2() {
   fl.display();
   
   rflip = true;
-  lflip = true;  
+  lflip = true; 
+  
+//se acaba el juego
+  if (crabbies.size() == 0) {
+    escenario = 3;
+    instanteRestart = millis();
+    mE2.pause();
+    mE2.rewind();
+    mE3.play();
+    mE3.loop();
+  }
 }
 
+void escenario3() {
+  loopingE3.loop();
+  image(loopingE3, width/2, height/2, width, height);
+  
+  textSize(width/12);
+  textAlign(CENTER);
+  text("YOUR SCORE: "+puntos,  width/2, 2*height/3 + height/10);
+  
+  if (millis() - instanteRestart > esperaRestart) {
+    escenario = 1;
+    mE3.pause();
+    mE3.rewind();
+    mE1.play();
+    mE1.loop();
+  }
+}
 
 void keyPressed() {    
-  if (key == 's') {
+  if (key == 's' && escenario == 1) {
     escenario = 2;
     mE1.pause();
     mE1.rewind();
