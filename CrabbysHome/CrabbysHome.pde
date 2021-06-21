@@ -134,14 +134,16 @@ void setup() {
   fl = new Flipper(width/2 - 120, height - 200, 25, -QUARTER_PI/2 - radians(15), QUARTER_PI - radians(20), true, 15, 10, 60);  
   rflip = false;
   
-  escenario = 2;
+  escenario = 1;
   
   font = createFont("crabbytype.ttf",width/50);
   textFont(font);
   
   disparando = false;
   
-  esperaRestart = 16500;
+  esperaRestart = 15900;
+  
+  puntos = 0;
 }
 
 
@@ -167,9 +169,9 @@ void escenario2() {
   //arco.display();
   //inclinada.display();
   
-  //for (Boundary pared : paredes) {
-  //  pared.display();
-  //}
+  for (Boundary pared : paredes) {
+    pared.display();
+  }
   
   for (Boundary obs : obstaculos) {
     obs.display();
@@ -226,12 +228,11 @@ void escenario3() {
   textAlign(CENTER);
   text("YOUR SCORE: "+puntos,  width/2, 2*height/3 + height/10);
   
-  if (millis() - instanteRestart > esperaRestart) {
+  if (millis() - instanteRestart > esperaRestart) {    
     escenario = 1;
     mE3.pause();
     mE3.rewind();
-    mE1.play();
-    mE1.loop();
+    setup();
   }
 }
 

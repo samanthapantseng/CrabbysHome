@@ -23,7 +23,8 @@ class Windmill {
     
   void display() {
     box1.display();
-    
+
+    strokeWeight(10);
     Vec2 anchor = box2d.coordWorldToPixels(box1.body.getWorldCenter());
     fill(#c1b376);
     stroke(#294D3E);
