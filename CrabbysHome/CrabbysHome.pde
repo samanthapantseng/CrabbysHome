@@ -102,18 +102,18 @@ void setup() {
   
   //conchas-obstaculos
   obstaculos = new ArrayList<Boundary>(); 
-  obstaculos.add(new Boundary(width-150,150,8,"obstaculo",20));  
-  obstaculos.add(new Boundary(width/2.5,350,8,"obstaculo",20));  
-  obstaculos.add(new Boundary(50,340,8,"obstaculo",20));
-  obstaculos.add(new Boundary(width-170,height/2,8,"obstaculo",20));
-  obstaculos.add(new Boundary(width-120,height-240,8,"obstaculo",20));
+  obstaculos.add(new Boundary(width/9,height/4,8,"obstaculo",20));  
+  obstaculos.add(new Boundary(width-width/3.8,height/4,8,"obstaculo",20));  
+  obstaculos.add(new Boundary(width/1.7,height/2,8,"obstaculo",20));
+  obstaculos.add(new Boundary(width/3,height/2,8,"obstaculo",20));
+
 
   //estrellas-obstaculos
-  obstaculos.add(new Boundary(width/4,200,8,"estrella",50));
-  obstaculos.add(new Boundary(width/2,height-340,8,"estrella",50));
+  obstaculos.add(new Boundary(width/2.15,height/5,8,"estrella",50));
+  obstaculos.add(new Boundary(width/2.15,height/2.75,8,"estrella",50));
  
   //portal-obstaculos
-  obstaculos.add(new Boundary(width/2,height/4,10,"home",-10));
+  obstaculos.add(new Boundary(width/9,height/2.5,10,"home",-10));
   obstaculos.add(new Boundary(width-130,height-320,10,"home",-10));
   
   //Crabbies
@@ -127,7 +127,7 @@ void setup() {
   //windmills
   windmills = new ArrayList<Windmill>();  
   windmills.add (new Windmill(width-width/3.8, height/2.5, -1));
-  windmills.add (new Windmill(width/9, 480, 1));  
+  windmills.add (new Windmill(width/9, (height/2)+(height/10), 1));  
   
   //flippers
   fr = new Flipper(width/2 + 70, height - 200, 25, -QUARTER_PI/2, QUARTER_PI, false, 15, 10, 60);
@@ -195,7 +195,7 @@ void escenario2() {
   for (Crabby crabbie : crabbies) {
     if (crabbie.getActivarPortal()) {
       if (posHome == "a") {
-        crabbie.portal(width/2, height/4);   
+        crabbie.portal(width/9, height/2.5);   
       }       
       else if (posHome == "b") {
         crabbie.portal(width-130, height-320);    
