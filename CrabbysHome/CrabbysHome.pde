@@ -92,7 +92,7 @@ void setup() {
   paredes.add(new Boundary(width-5,height/2,10,height,7, false));
   paredes.add(new Boundary(5,height/2,10,height,7, false));
   //Cañon de disparo
-  paredes.add(new Boundary(width-80,height/2+100,10,350,7, false));  
+  paredes.add(new Boundary(width-80,height/2+40,10,470,7, false));  
   //Barra delete
   paredes.add(new Boundary(0, height/2+270,2*width-160,10,7, true));
   //Barra secreta
@@ -121,8 +121,8 @@ void setup() {
   crabbies.add (new Crabby(width-40,height-80,30));
   crabbies.add (new Crabby(width-100,height-80,30));
   crabbies.add (new Crabby(width-150,height-80,30));
-  //crabbies.add (new Crabby(width-200,height-80,30));
-  //crabbies.add (new Crabby(width-250 ,height-80,30));
+  crabbies.add (new Crabby(width-200,height-80,30));
+  crabbies.add (new Crabby(width-250 ,height-80,30));
   
   //windmills
   windmills = new ArrayList<Windmill>();  
@@ -169,9 +169,9 @@ void escenario2() {
   //arco.display();
   //inclinada.display();
   
-  for (Boundary pared : paredes) {
-    pared.display();
-  }
+  //for (Boundary pared : paredes) {
+  //  pared.display();
+  //}
   
   for (Boundary obs : obstaculos) {
     obs.display();
@@ -181,7 +181,7 @@ void escenario2() {
     windmill.display();
   }
   
-  textSize(width/25);
+  textSize(width/21);
   textAlign(CENTER);
   text("SCORE: "+puntos, width/2, height/7);
   
@@ -226,7 +226,10 @@ void escenario3() {
   
   textSize(width/12);
   textAlign(CENTER);
-  text("YOUR SCORE: "+puntos,  width/2, 2*height/3 + height/10);
+  text("GAME OVER",  width/2, 2*height/3 + height/20);
+  
+    textSize(width/15);
+  text("score: "+puntos, width/2, 2*height/3 + width/5.5);
   
   if (millis() - instanteRestart > esperaRestart) {    
     escenario = 1;
@@ -263,7 +266,6 @@ void keyPressed() {
   }
 }
 
-
 void keyReleased( ) {
   if (key == ' ' && escenario == 2) {
     
@@ -272,7 +274,7 @@ void keyReleased( ) {
     float potencia = map(constrain(difeTiempo, 0 , 7000), 0, 7000, 75, 175);    
     crabbies.get(0).shoot(potencia);
     sfxShoot.trigger();
-    disparando = false;
+    disparando = false;    
   }
   
   if(keyCode == RIGHT && rflip) {
@@ -330,8 +332,7 @@ void beginContact(Contact cp) {
          posHome = "b";
        }
     }
-      
-    
+          
     if (tmpObs.isDelete() == true) {
       tmpCrabby.delete();
     }        
@@ -340,31 +341,28 @@ void beginContact(Contact cp) {
   if (o1.getClass() == Boundary.class && o2.getClass() == Crabby.class) {
     Boundary tmpObs = (Boundary) o1;
     Crabby tmpCrabby = (Crabby) o2;    
-    if (tmpObs.getId().equals("obstaculo")){
+    if (tmpObs.getId().equals("obstaculo")) {
        puntos +=(tmpObs.getValor());
        tmpObs.animar();
        sfxChoque.trigger();        
     }
-    else if  (tmpObs.getId().equals("estrella")){      
+    else if (tmpObs.getId().equals("estrella")) {      
        puntos +=(tmpObs.getValor());
        tmpObs.animar();
        sfxStarfish.trigger();        
     }
-    else if  (tmpObs.getId().equals("home")){
+    else if (tmpObs.getId().equals("home")) {
        tmpCrabby.teletransportar();
        puntos +=(tmpObs.getValor());
        tmpObs.animar();
        sfxHome.trigger();
        if (tmpObs.getPos() > height/2 ){
          posHome = "a";
-       }
-       
+       }       
        else if (tmpObs.getPos() < height/2 ){
          posHome = "b";
        }
-    }
-    
-    
+    }        
     if (tmpObs.isDelete() == true) {
       tmpCrabby.delete();
     }     

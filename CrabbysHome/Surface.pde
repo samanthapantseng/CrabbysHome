@@ -34,9 +34,8 @@ class Surface {
   Surface() {
     surface = new ArrayList<Vec2>();
 
-    surface.add(new Vec2(width-80,height-10));
-    surface.add(new Vec2(0,height-80));
-
+    surface.add(new Vec2(width-80,height-20));
+    surface.add(new Vec2(0,height-60));
 
     ChainShape chain = new ChainShape();
 
@@ -59,7 +58,7 @@ class Surface {
    void display() {
    
      strokeWeight(10);
-     stroke(#637b4e);
+     stroke(#c1b376);
      noFill();
      beginShape();
      for (Vec2 v: surface) {
