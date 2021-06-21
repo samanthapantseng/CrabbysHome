@@ -92,9 +92,9 @@ void setup() {
   paredes.add(new Boundary(width-5,height/2,10,height,7, false));
   paredes.add(new Boundary(5,height/2,10,height,7, false));
   //Cañon de disparo
-  paredes.add(new Boundary(width-80,height/2+105,10,350,7, false));  
+  paredes.add(new Boundary(width-80,height/2+100,10,350,7, false));  
   //Barra delete
-  paredes.add(new Boundary(0, height/2+270,2*width-180,10,7, true));
+  paredes.add(new Boundary(0, height/2+270,2*width-160,10,7, true));
   //Barra secreta
   paredes.add(new Boundary(0, height/2+280,2*width-180,0.1 ,7, false));
   //Barra inclinada
@@ -134,7 +134,7 @@ void setup() {
   fl = new Flipper(width/2 - 120, height - 200, 25, -QUARTER_PI/2 - radians(15), QUARTER_PI - radians(20), true, 15, 10, 60);  
   rflip = false;
   
-  escenario = 1;
+  escenario = 2;
   
   font = createFont("crabbytype.ttf",width/50);
   textFont(font);
@@ -164,17 +164,21 @@ void escenario1() {
 void escenario2() {  
   
   image(E2, width/2, height/2, width, height);
-  arco.display();
-  inclinada.display();
+  //arco.display();
+  //inclinada.display();
   
-  for (Boundary pared : paredes) {
-    pared.display();
-  }
+  //for (Boundary pared : paredes) {
+  //  pared.display();
+  //}
   
   for (Boundary obs : obstaculos) {
     obs.display();
   }
 
+  for (Windmill windmill : windmills) {
+    windmill.display();
+  }
+  
   textSize(width/25);
   textAlign(CENTER);
   text("SCORE: "+puntos, width/2, height/7);
@@ -195,10 +199,6 @@ void escenario2() {
         crabbie.portal(width-130, height-320);    
       }
     }
-  }
-  
-  for (Windmill windmill : windmills) {
-    windmill.display();
   }
 
   fr.display();
